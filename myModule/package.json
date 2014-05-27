@@ -1,0 +1,12 @@
+{
+  "name": "jasenlew-github-example",
+  "version": "0.0.0",
+  "description": "Get a list of jasenlew's repos",
+  "main": "github.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
