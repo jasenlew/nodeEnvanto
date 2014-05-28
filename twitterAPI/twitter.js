@@ -9,6 +9,21 @@ var stream = new Stream({
     api_params: {'locations': "-180,-90,180,90"}    
 });
 
+var mongo = require('mongodb');
+var host = '127.0.0.1';
+var port = mongo.Connection.DEFAULT_PORT;
+
+var db = new mongo.Db('nodejs-introduction', new mongo.Server(host, port, {}));
+var tweetCollection;
+
+db.open(function (error) {
+	console.log('We are connected! ' + host + ':' + port);
+
+	db.collection('tweet', function (error, collection) {
+		tweetCollection = collection;
+	});
+});
+
 //create stream
 stream.stream();
 
@@ -16,5 +31,12 @@ stream.stream();
 var body = '';
 
 stream.on('data', function(obj) {
-  console.log("Tweet: " + obj.text);
+  tweetCollection.insert(obj, function (error) {
+  	if (error) {
+  		console.log('Error: ' + error.message);
+  	} else {
+  		console.log('Inserted into database');
+  	}
+  });
+  // console.log("Tweet: " + obj.text);
 });
