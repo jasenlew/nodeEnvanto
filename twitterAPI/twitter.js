@@ -1,4 +1,9 @@
+var mongo = require('mongodb');
+var host = '127.0.0.1';
+var port = mongo.Connection.DEFAULT_PORT;
 var Stream = require('twitter-stream-oauth');
+
+var db = new mongo.Db('nodejs-introduction', new mongo.Server(host, port, {}));
 
 var stream = new Stream({
     consumer_key: 'bFom5qp0yvVN4iGvIsFFx20gT',
@@ -9,11 +14,6 @@ var stream = new Stream({
     api_params: {'locations': "-180,-90,180,90"}    
 });
 
-var mongo = require('mongodb');
-var host = '127.0.0.1';
-var port = mongo.Connection.DEFAULT_PORT;
-
-var db = new mongo.Db('nodejs-introduction', new mongo.Server(host, port, {}));
 var tweetCollection;
 
 db.open(function (error) {
