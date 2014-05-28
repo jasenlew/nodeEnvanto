@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Real-time Tweets</title>
+
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<h1>Real-time Tweets</h1>
+
+	<ul id="tweets">
+		{{INITIAL_TWEETS}}
+	</ul>
+
+	<script type="text/javascript">
+		var socket = io.connect('http://127.0.0.1:1388');
+		var ul = document.getElementById("tweets");
+		socket.on('tweet', function (tweet) {
+			var li = document.createElement("li");
+			li.innerHTML = "<strong>" + tweet.user.screen_name + ": </strong> " + tweet.text;
+			ul.insertBefore(li, ul.getElementByTagName("li")[0]);
+		});
+	</script>
+</body>
+</html>
