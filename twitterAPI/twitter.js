@@ -13,7 +13,6 @@ var stream = new Stream({
 stream.stream();
 
 //listen stream data
-
 var body = '';
 
 stream.on('data', function(obj) {
