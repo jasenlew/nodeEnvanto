@@ -1,13 +1,20 @@
+//Requiring File System (fs) and Express modules
 var fs = require('fs');
 var express = require('express');
+var http = require('http');
 
+//Reading JSON object with host and port data
 var config = JSON.parse(fs.readFileSync("config.json"));
 var host = config.host;
 var port = config.port;
 
+//Starting Express server
 var app = express();
-
 console.log('Starting...');
+
+app.listen(port, host, function () {
+	console.log('Listening (host) ' + host + ':' + port + ' (port)');
+});
 
 app.get('/', function (request, response) {
 	var content = fs.readFileSync("template.html");
@@ -22,19 +29,16 @@ app.get('/', function (request, response) {
 		response.setHeader("Content-Type", "text/html");
 		response.send(content);
 	});
-
 });
 
-app.listen(port, host, function () {
-	console.log('Listening (host) ' + host + ':' + port + ' (port)');
-});
+// var server = http.createServer(app);
+// var io = require('socket.io').listen(server);
 
 var io = require('socket.io').listen(app);
 
 var mongo = require('mongodb');
 var dbHost = '127.0.0.1';
 var dbPort = mongo.Connection.DEFAULT_PORT;
-
 var db = new mongo.Db('nodejs-introduction', new mongo.Server(dbHost, dbPort, {}));
 
 var tweetCollection;
@@ -55,8 +59,6 @@ function getTweets(callback) {
 		});
 }
 
-
-
 var Stream = require('twitter-stream-oauth');
 
 var stream = new Stream({
@@ -76,6 +78,12 @@ stream.stream();
 var body = '';
 
 stream.on('data', function(obj) {
+ 
+ //  io.sockets.on('connection', function (socket) {
+ //  	console.log('socket.io started');
+	//   io.socket.emit("tweet", obj);
+	// });
+
   io.sockets.emit("tweet", obj);
 
   tweetCollection.insert(obj, function (error) {
